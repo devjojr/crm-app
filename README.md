@@ -1,6 +1,6 @@
 # CRM App
 
-CRM App is a client-side EJS application designed to help manage client information.
+CRM App is a server-side EJS application designed to help manage client information.
 
 ## Features
 
