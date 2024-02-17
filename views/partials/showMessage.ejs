@@ -1,0 +1,14 @@
+<% if (errors) {
+    errors.forEach((err) => { %>
+      <div>
+        <span style="color: red;">Error: <%= err %></span>
+      </div>
+    <% })
+  } %>
+  <% if (info) {
+    info.forEach((msg) => { %>
+      <div>
+        <span style="color: green;">Info: <%= msg %></span>
+      </div>
+    <% })
+  } %>

@@ -1,0 +1,85 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/navbar.ejs") %>
+
+<section class="flex flex-col items-center my-12 min-h-screen">
+  <h2 class="text-3xl font-bold text-gray-800 mb-6">Client List</h2>
+
+  <% if (clients && clients.length) { %>
+    <div class="bg-white shadow-md rounded my-8">
+      <table class="w-full table-auto">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 border border-gray-300">First Name</th>
+            <th class="px-4 py-2 border border-gray-300">Last Name
+              <a href="/clients?sort=lastName" class="ml-1 text-blue-500"><i class="fas fa-sort"></i></a>
+            </th>
+            <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">Email</th>
+            <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">Phone Number</th>
+            <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">Street</th>
+            <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">City</th>
+            <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">State</th>
+            <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">Zip Code</th>
+            <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">Sale Amount</th>
+            <th class="px-4 py-2 border border-gray-300"></th>
+            <th class="px-4 py-2 border border-gray-300"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% clients.forEach((client) => { %>
+            <tr>
+              <td class="px-4 py-2 border border-gray-300"><%= client.firstName %></td>
+              <td class="px-4 py-2 border border-gray-300"><%= client.lastName %></td>
+              <td class="px-4 py-2 border border-gray-300 hidden md:table-cell"><%= client.email %></td>
+              <td class="px-4 py-2 border border-gray-300 hidden md:table-cell"><%= client.phone %></td>
+              <td class="px-4 py-2 border border-gray-300 hidden md:table-cell"><%= client.address.street %></td>
+              <td class="px-4 py-2 border border-gray-300 hidden md:table-cell"><%= client.address.city %></td>
+              <td class="px-4 py-2 border border-gray-300 hidden md:table-cell"><%= client.address.state %></td>
+              <td class="px-4 py-2 border border-gray-300 hidden md:table-cell"><%= client.address.zipCode %></td>
+              <td class="px-4 py-2 border border-gray-300 hidden md:table-cell">$<%= client.sale %></td>
+              <td class="px-4 py-2 border border-gray-300">
+                <a href="/clients/edit/<%= client._id %>">
+                  <button type="button" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Edit</button>
+                </a>
+              </td>
+              <td class="px-4 py-2 border border-gray-300">
+                <form action="/clients/delete/<%= client._id %>" method="POST">
+                  <input type="hidden" name="_csrf" value="<%= _csrf %>">
+                  <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- pagination links -->
+    <div class="flex justify-center mt-4 mb-12">
+      <% if (currentPage > 1) { %>
+        <a href="/clients?page=<%= currentPage - 1 %>" class="mx-2 py-2 px-4 bg-blue-500 text-white rounded">Previous</a>
+      <% } %>
+      
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <a href="/clients?page=<%= i %>" class="<%= i === currentPage ? 'mx-2 py-2 px-4 bg-blue-700 text-white rounded' : 'mx-2 py-2 px-4 bg-blue-200 text-gray-800 rounded' %>"><%= i %></a>
+      <% } %>
+
+      <% if (currentPage < totalPages) { %>
+        <a href="/clients?page=<%= currentPage + 1 %>" class="mx-2 py-2 px-4 bg-blue-500 text-white rounded">Next</a>
+      <% } %>
+    </div>
+
+    <a href="/clients/new" class="mb-12">
+      <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add New Client</button>
+    </a>
+  <% } else { %>
+    <div class="bg-white shadow-md rounded my-8 p-8 text-center">
+      <h3 class="text-xl font-bold mb-4">No Clients Yet</h3>
+      <a href="/clients/new">
+        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add New Client</button>
+      </a>
+    </div>
+    <a type="button" href="/" class="mb-5"><button type="button">Home</button></a>
+  <% } %>
+</section>
+
+<%- include("partials/footer.ejs") %>

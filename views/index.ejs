@@ -1,0 +1,16 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/navbar.ejs") %> 
+<%- include("partials/showMessage.ejs") %>
+
+
+  <section class="flex flex-col items-center mx-auto">
+    <% if (user) { %>
+      <h1 class="text-3xl font-bold text-gray-800 mb-6 mt-12"><%= user.name %>'s Dashboard</h1>
+      <%- include('partials/clientChart.ejs') %>
+    <% } else { %>
+      <%- include('partials/landingPage.ejs') %>
+    <% } %>
+  </section>
+
+
+<%- include("partials/footer.ejs") %>

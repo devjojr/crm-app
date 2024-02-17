@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Client Relationship Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  </head>
+  <body class="bg-gray-100">
+    <header class="block w-full px-4 py-2 mx-auto text-black bg-white border shadow-md border-white/80 bg-opacity-80 backdrop-blur-2xl backdrop-saturate-200 lg:px-8 lg:py-4">
+      <nav class="container flex items-center justify-between mx-auto text-black">
+        <a href="/" class="text-2xl font-bold text-gray-800">CRM App</a>
+        <div class="hidden md:block">
+          <% if (user) { %>
+            <form method="POST" action="/sessions/logoff">
+              <input type="hidden" name="_csrf" value="<%= _csrf %>">
+              <button type="submit" class="px-4 py-2 text-gray-800 hover:bg-gray-200 rounded">Logoff</button>
+            </form>
+          <% } else { %>
+            <a href="/sessions/logon" class="px-4 py-2 text-gray-800 hover:bg-gray-200 rounded">Logon</a>
+            <a href="/sessions/register" class="px-4 py-2 text-gray-800 hover:bg-gray-200 rounded">Register</a>
+          <% } %>
+        </div>
+        <button class="md:hidden flex items-center px-3 py-2 rounded text-gray-800 hover:bg-gray-200" id="hamburger-menu">
+          <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+        </button>
+      </nav>
+      <div class="hamburger-menu hidden md:hidden" id="hamburger-menu-content">
+        <% if (user) { %>
+          <form method="POST" action="/sessions/logoff">
+            <input type="hidden" name="_csrf" value="<%= _csrf %>">
+            <button type="submit" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded">Logoff</button>
+          </form>
+        <% } else { %>
+          <a href="/sessions/logon" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded">Logon</a>
+          <a href="/sessions/register" class="block px-4 py-2 text-gray-800 hover:bg-gray-200 rounded">Register</a>
+        <% } %>
+      </div>
+    </header>
+
+    <section class="flex flex-col items-center my-12">
+      <form action="<%= "/clients/update/" + client._id %>" method="POST" class="max-w-xl w-full my-5 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Edit Client</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="mb-4">
+            <label for="firstName" class="block text-gray-700 font-bold mb-2">First Name</label>
+            <input type="text" name="firstName" id="firstName" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= client.firstName %>" required>
+          </div>
+
+          <div class="mb-4">
+            <label for="lastName" class="block text-gray-700 font-bold mb-2">Last Name</label>
+            <input type="text" name="lastName" id="lastName" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= client.lastName %>" required>
+          </div>
+
+          <div class="mb-4 col-span-2">
+            <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
+            <input type="email" name="email" id="email" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= client.email %>" required>
+          </div>
+          
+          <div class="mb-4 col-span-2">
+            <label for="phone"  class="block text-gray-700 font-bold mb-2">Phone</label>
+            <input type="tel" name="phone" id="phone" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= client.phone %>" required>
+          </div>
+
+          <div class="mb-4 col-span-2">
+            <label for="street" class="block text-gray-700 font-bold mb-2">Street</label>
+            <input type="text" name="address[street]" id="street" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= client.address.street %>" required>
+          </div>
+          
+          <div class="mb-4 col-span-2">
+            <label for="city" class="block text-gray-700 font-bold mb-2">City</label>
+            <input type="text" name="address[city]" id="city" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= client.address.city %>" required>
+          </div>
+
+          <div class="mb-4">
+            <label for="state" class="block text-gray-700 font-bold mb-2">State</label>
+            <input type="text" name="address[state]" id="state" value="<%= client.address.state %>" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+          </div>
+
+          <div class="mb-4">
+            <label for="zipCode" class="block text-gray-700 font-bold mb-2">Zip Code</label>
+            <input type="text" name="address[zipCode]" id="zipCode" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= client.address.zipCode %>" required>
+          </div>
+
+          <div class="mb-4">
+            <label for="sale" class="block text-gray-700 font-bold mb-2">Sale Amount</label>
+            <input type="number" name="sale" id="sale"  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="<%= client.sale %>" required>
+          </div>
+        </div>
+        
+        <br>
+        <% if (errors) {
+          errors.forEach((err) => { %>
+            <div>
+              <span style="color: red;">Error: <%= err %></span>
+            </div>
+          <% })
+        } %>
+        <% if (info) {
+          info.forEach((msg) => { %>
+            <div>
+              <span style="color: green;">Info: <%= msg %></span>
+            </div>
+          <% })
+        } %>
+        <br>
+
+        <div class="flex">
+          <button type="submit" class="bg-green-500 hover:bg-green-700 mr-5 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Update Client</button>
+          <input type="hidden" name="_csrf" value="<%= _csrf %>">
+          <a href="/clients" class="ml-5"><button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cancel</button></a>
+        </div>
+      </form>
+      <a type="button" href="/" class="mb-5"><button type="button">Home</button></a>
+    </section>
+    <br>
+    <br>
+    <footer class="block w-full px-4 py-2 mx-auto text-black bg-white lg:px-8 lg:py-4 fixed bottom-0">
+      <div class="container flex items-center mx-auto">
+        <p class="text-center w-full">© Devon CRM App. All rights reserved.</p>
+      </div>
+    </footer>
+    <script>
+      document.getElementById('hamburger-menu').addEventListener('click', function() {
+        document.getElementById('hamburger-menu-content').classList.toggle('hidden');
+      });
+    </script>
+  </body>
+</html>
